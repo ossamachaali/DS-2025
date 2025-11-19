@@ -1,1 +1,128 @@
 
+# Compte Rendu : Classification des Vins avec k-NN
+
+## Introduction
+
+Ce rapport présente une implémentation du classifieur k-Nearest Neighbors (k-NN) appliqué à la classification de la qualité des vins blancs. L'objectif est d'apprendre un modèle de prédiction capable de discriminer les vins de bonne qualité des vins de mauvaise qualité en utilisant leurs caractéristiques physico-chimiques.
+
+## 1. Description du Projet
+
+Le travail pratique porte sur la classification binaire des vins blancs selon deux catégories :
+- **Classe 0** : Vins de mauvaise qualité (score de qualité ≤ 5)
+- **Classe 1** : Vins de bonne qualité (score de qualité > 5)
+
+Le dataset utilisé provient du Machine Learning Repository de l'UCI et contient 11 caractéristiques physico-chimiques mesurées sur les vins.
+
+## 2. Préparation des Données
+
+### 2.1 Chargement et Exploration
+
+Le dataset a été téléchargé directement depuis le lien UCI. Les données contiennent :
+- **Variables d'entrée (X)** : 11 caractéristiques physico-chimiques (acidité, alcool, densité, etc.)
+- **Variable de sortie (Y)** : Score de qualité du vin (transformé en problème binaire)
+
+### 2.2 Partitionnement des Données
+
+Les données ont été divisées en trois ensembles :
+- **Ensemble d'apprentissage (Xa, Ya)** : 33.3% des données restantes après première split (environ 33.3% du total)
+- **Ensemble de validation (Xv, Yv)** : 50% des données d'apprentissage
+- **Ensemble de test (Xt, Yt)** : 33.3% des données initiales
+
+La stratification a été appliquée pour préserver la distribution des classes à chaque étape.
+
+**Justification** : La stratification garantit que les proportions des classes restent identiques dans chaque ensemble, ce qui évite les biais d'apprentissage dus à un déséquilibre classe. Le brassage aléatoire prévient les biais temporels ou de structuration des données.
+
+## 3. Classification avec k-NN
+
+### 3.1 Algorithme k-NN
+
+L'algorithme k-Nearest Neighbors fonctionne selon le principe suivant :
+- Pour chaque nouveau sample x_i, on identifie ses k voisins les plus proches dans l'ensemble d'apprentissage
+- La distance euclidienne est utilisée : || x_i - x_j ||_2 = sqrt((x_i - x_j)^T (x_i - x_j))
+- La classe prédite correspond au label majoritaire parmi ces k voisins
+
+### 3.2 Évaluation de Performance
+
+Le taux d'erreur est calculé comme :
+
+```
+Erreur = (1/N) * Σ 1[y_i ≠ ŷ_i]
+```
+
+où N est la taille de l'ensemble, y_i le vrai label et ŷ_i le label prédit.
+
+### 3.3 Expériences
+
+L'implémentation teste différentes valeurs de k (de 1 à 40) et évalue les performances sur les ensembles d'apprentissage et de validation.
+
+**Observations clés** :
+- Les **erreurs d'apprentissage** décroissent généralement avec k augmente (le modèle s'adapte moins bien)
+- Les **erreurs de validation** montrent un comportement en U, révélant le phénomène de surapprentissage
+- **Surapprentissage** : Pour k très petit (k=1, k=3), l'erreur d'apprentissage est très faible mais l'erreur de validation augmente, ce qui indique une faible capacité de généralisation
+
+## 4. Analyse de la Surcharge d'Apprentissage
+
+### 4.1 Identification du Problème
+
+Le graphique erreur d'apprentissage vs validation révèle :
+- **Pour k petit** : Écart important entre les deux courbes → le modèle mémorise les données d'apprentissage
+- **Pour k optimal** : Les deux courbes convergent → meilleur équilibre biais-variance
+
+### 4.2 Sélection du Paramètre k
+
+Le meilleur k* est sélectionné en minimisant l'erreur de validation. Cette approche garantit une bonne performance sur des données non vues pendant l'entraînement.
+
+## 5. Normalisation des Données
+
+### 5.1 Justification
+
+La normalisation est cruciale pour k-NN car cet algorithme repose sur les distances entre points. Sans normalisation :
+- Les variables avec des échelles grandes dominent le calcul de distance
+- Les variables avec des petites valeurs sont quasi ignorées
+- Les performances se dégradent
+
+### 5.2 Implémentation
+
+La normalisation par **standardisation** (z-score) est appliquée :
+
+```
+X_norm = (X - μ) / σ
+```
+
+où μ est la moyenne et σ l'écart-type de chaque caractéristique.
+
+**Important** : Le normaliseur est **ajusté uniquement sur Xa** et appliqué identiquement à Xv et Xt pour éviter la fuite d'information.
+
+### 5.3 Impact de la Normalisation
+
+L'application de la normalisation améliore significativement les performances du modèle k-NN en donnant le même poids à toutes les caractéristiques.
+
+## 6. Résumé des Résultats
+
+| Aspect | Résultat |
+|--------|----------|
+| Algorithme | k-Nearest Neighbors |
+| Nombre de caractéristiques | 11 |
+| Nombre de classes | 2 (binaire) |
+| Meilleur k* détecté | Déterminé par minimisation de l'erreur de validation |
+| Technique d'optimisation | Recherche en grille sur k ∈ [1,40] |
+| Normalisation | StandardScaler (z-score) |
+| Bénéfice principal | Meilleure généralisation sur données non vues |
+
+## 7. Conclusions
+
+1. **Surapprentissage** : Le classifieur k-NN simple tend à surcharger pour k petit, attesté par l'écart croissant entre erreurs de test et d'apprentissage
+
+2. **Sélection robuste de k** : L'utilisation de la validation croisée et d'un ensemble de validation distinct prévient l'overfitting
+
+3. **Importance de la normalisation** : La standardisation des caractéristiques améliore les performances et la stabilité du modèle
+
+4. **Sensibilité à la split** : Pour améliorer la robustesse, des techniques comme la **validation croisée k-fold** peuvent réduire la dépendance aux partitions de données aléatoires
+
+## Recommandations Futures
+
+Pour améliorer la robustesse du modèle :
+- Appliquer la validation croisée k-fold
+- Tester d'autres métriques de distance (Manhattan, Minkowski)
+- Comparer avec d'autres classifieurs (arbres de décision, SVM, ensembles)
+- Analyser les caractéristiques les plus discriminantes
