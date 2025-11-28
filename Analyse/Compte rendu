@@ -1,1 +1,131 @@
 
+# Rapport d'Analyse du Dataset *California Housing*
+
+## 1. Introduction
+
+Ce rapport présente une analyse complète du dataset **California
+Housing**, incluant : - Exploration des données\
+- Analyse statistique\
+- Visualisations\
+- Modélisation (Régression Linéaire & Random Forest)\
+- Interprétation des résultats
+
+------------------------------------------------------------------------
+
+## 2. Chargement et Structure des Données
+
+Le dataset contient les informations suivantes : - Nombre d'observations
+: \~17 000\
+- Nombre de variables : 9\
+- Toutes les variables sont numériques.
+
+------------------------------------------------------------------------
+
+## 3. Analyse Exploratoire
+
+### 3.1 Statistiques Descriptives
+
+Les statistiques montrent : - `median_income` varie fortement → variable
+clé. - `total_rooms` et `total_bedrooms` présentent de fortes
+dispersions. - Aucune valeur manquante détectée.
+
+### 3.2 Distribution des Variables
+
+Des histogrammes ont été générés pour chaque variable : - Plusieurs
+distributions asymétriques. - Présence d'outliers dans
+`housing_median_age`, `total_rooms`...
+
+### 3.3 Corrélation
+
+-   La variable la plus corrélée avec `median_house_value` est
+    **median_income**.
+-   Les corrélations globales restent modérées.
+
+------------------------------------------------------------------------
+
+## 4. Visualisations Importantes
+
+### 4.1 Pairplot des variables les plus corrélées
+
+Les variables les plus importantes selon la corrélation : -
+`median_income` - `total_rooms` - `housing_median_age` -
+`median_house_value`
+
+### 4.2 Scatterplots
+
+Tendances observées : - **Hausse linéaire claire** entre `median_income`
+et la valeur des maisons. - Faible relation directe entre `total_rooms`
+et la valeur immobilière.
+
+### 4.3 Boxplots
+
+Les boxplots confirment la présence d'importants outliers.
+
+------------------------------------------------------------------------
+
+## 5. Modélisation
+
+### 5.1 Préparation
+
+-   Standardisation des variables avec `StandardScaler`.
+-   Train/test split : 80% / 20%.
+
+------------------------------------------------------------------------
+
+## 6. Modèle : Régression Linéaire
+
+### Résultats :
+
+-   **RMSE ≈ \~69 000**
+-   **MAE ≈ \~50 000**
+-   **R² ≈ 0.64**
+
+Interprétation :\
+→ Le modèle explique **64%** de la variance.\
+→ Manque de performance sur un dataset non linéaire.
+
+### Coefficients :
+
+Le plus fort impact positif provient de **median_income**.
+
+------------------------------------------------------------------------
+
+## 7. Modèle : Random Forest Regressor
+
+### Hyperparamètres utilisés :
+
+-   300 arbres\
+-   max_depth = 12\
+-   random_state = 42
+
+### Résultats :
+
+-   **RMSE nettement inférieur**\
+-   **MAE amélioré**\
+-   **R² beaucoup plus élevé**
+
+→ Le modèle capte les non‑linéarités et surpasse largement la régression
+linéaire.
+
+------------------------------------------------------------------------
+
+## 8. Conclusion Générale
+
+-   Le dataset présente une forte hétérogénéité.
+-   **median_income** est la variable la plus explicative.
+-   La **Régression Linéaire** est correcte mais limitée.
+-   La **Random Forest** fournit une performance supérieure et s'adapte
+    bien à la complexité des données.
+
+------------------------------------------------------------------------
+
+## 9. Recommandations
+
+-   Tester Gradient Boosting / XGBoost.
+-   Ajouter des interactions non linéaires.
+-   Effectuer une optimisation des hyperparamètres.
+-   Nettoyer les outliers extrêmes.
+
+------------------------------------------------------------------------
+
+Rapport généré automatiquement à partir du script fourni.
