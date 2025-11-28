@@ -1,124 +1,80 @@
+
 # Compte Rendu : Classification des Vins avec k-NN
 
 ## Introduction
-
 Ce rapport présente une implémentation du classifieur **k-Nearest Neighbors (k-NN)** appliqué à la classification de la qualité des vins blancs.  
-L'objectif est de prédire si un vin est **de bonne** ou **de mauvaise qualité** à partir de ses caractéristiques physico-chimiques.
-
----
+L'objectif est de prédire si un vin est **de bonne** ou **de mauvaise qualité** à partir de leurs caractéristiques physico-chimiques.
 
 ## 1. Description du Projet
-
 La classification est binaire :
 - **Classe 0** : Vins de mauvaise qualité (qualité ≤ 5)
 - **Classe 1** : Vins de bonne qualité (qualité > 5)
 
 Le dataset provient du **Machine Learning Repository de l'UCI** et contient **11 caractéristiques physico-chimiques**.
 
----
-
 ## 2. Préparation des Données
 
 ### 2.1 Chargement et Exploration
-
 - **X** : 11 variables (acidité, alcool, densité, chlorures, etc.)
 - **Y** : Score de qualité du vin (transformé en classification binaire)
 
 ### 2.2 Partitionnement des Données
-
-Le dataset est divisé en trois sous-ensembles :
-
 | Ensemble | Proportion | Description |
-|---------|------------|-------------|
-| **Xa, Ya (train)** | 33.3% | Apprentissage |
-| **Xv, Yv (validation)** | 33.3% des données restantes | Sélection du meilleur k |
-| **Xt, Yt (test)** | 33.3% | Évaluation finale du modèle |
+|----------|------------|-------------|
+| **Xa, Ya** (train) | 33.3% | Apprentissage |
+| **Xv, Yv** (validation) | 33.3% des données restantes | Recherche du meilleur k |
+| **Xt, Yt** (test) | 33.3% | Évaluation finale |
 
-La **stratification** assure le maintien de la proportion de bonnes et mauvaises classes dans chaque ensemble.
-
----
+La stratification maintient l’équilibre entre les classes.
 
 ## 3. Classification avec k-NN
 
-### 3.1 Algorithme
-
-Pour chaque nouveau point :
-1. Calcul de la **distance euclidienne** entre ce point et les points d’apprentissage  
+### 3.1 Principe
+1. Calcul des distances euclidiennes  
 2. Sélection des **k plus proches voisins**  
-3. Vote majoritaire pour déterminer la classe prédite  
+3. Vote majoritaire  
 
-Formule de la distance :
+### 3.2 Taux d’erreur
+Erreur = proportion de prédictions incorrectes.
 
-\[
-\| x_i - x_j \|_2 = \sqrt{(x_i - x_j)^T (x_i - x_j)}
-\]
-
-### 3.2 Taux d'erreur
-
-\[
-\text{Erreur} = \frac{1}{N} \sum_{i} \mathbb{1}[y_i \neq \hat{y}_i]
-\]
-
-### 3.3 Expérimentations (k = 1 à 40)
-
-- Erreur d’apprentissage **diminue** lorsque k augmente  
-- Erreur de validation **forme un U** (caractéristique du surapprentissage)  
-- Pour **k petit (1–3)** → modèle qui mémorise les données  
-
----
+### 3.3 Tests de k (1 → 40)
+- Erreur d’apprentissage ↓ avec k  
+- Erreur de validation → forme en U  
+- Surapprentissage marqué pour k = 1, 3  
 
 ## 4. Analyse du Surapprentissage
+- **k petit** → Variance élevée, overfitting  
+- **k grand** → Biais fort  
+- **k optimal** = celui minimisant l’erreur de validation  
 
-- **k petit (<5)** → forte variance, surapprentissage  
-- **k trop grand (>30)** → forte biais, perte de détails  
-- **k optimal** → celui minimisant l’erreur de validation  
+## 5. Normalisation
 
----
+### Justification
+k-NN utilise les distances → variables non normalisées dominent.
 
-## 5. Normalisation des Données
-
-### 5.1 Importance
-
-k-NN se base sur les distances :  
-Sans normalisation → les variables à grande échelle dominent.
-
-### 5.2 Standardisation utilisée
-
-\[
-X_{norm} = \frac{X - \mu}{\sigma}
-\]
-
-⚠ La normalisation est **apprise sur Xa uniquement**, puis appliquée sur Xv et Xt.
-
----
+### Standardisation
+X_norm = (X - μ) / σ  
+Scikit-learn : StandardScaler  
+⚠ Fit sur Xa uniquement (pas sur validation/test)
 
 ## 6. Résultats Résumés
-
 | Aspect | Valeur |
 |--------|--------|
-| **Algorithme** | k-NN |
-| **Caractéristiques** | 11 |
-| **Classes** | 2 |
-| **k optimal** | Déterminé via l’erreur de validation |
-| **Normalisation** | Standardisation (z-score) |
-| **Recherche** | k ∈ [1, 40] |
-
----
+| Algorithme | k-NN |
+| Caractéristiques | 11 |
+| Classes | 2 |
+| k optimal | Minimisation erreur validation |
+| Normalisation | Z-score |
+| Recherche de k | 1 → 40 |
 
 ## 7. Conclusions
-
-1. k-NN **surapprend** lorsque k est trop petit  
-2. La validation permet une **sélection robuste du meilleur k**  
-3. La normalisation est **indispensable**  
-4. Les résultats dépendent de la manière dont on divise les données  
-
----
+- k-NN surapprend pour k petit  
+- Validation = choix optimal  
+- Normalisation essentielle  
+- Sensibilité à la partition (train/val/test)
 
 ## Recommandations
-
-- Utiliser une **validation croisée k-fold**  
-- Tester d'autres distances (Manhattan, Minkowski…)  
+- Validation croisée k-fold  
+- Tester distances alternatives (Manhattan, Minkowski)  
 - Comparer avec SVM, Régression Logistique, Random Forest  
-- Étudier les caractéristiques les plus discriminantes  
-
----
+- Étudier l’importance des variables
