@@ -1,131 +1,115 @@
+# Compte Rendu : Classification des Vins avec k-NN
 
-# Rapport d'Analyse du Dataset *California Housing*
+## Introduction
 
-## 1. Introduction
+Ce rapport présente une implémentation du classifieur k-Nearest Neighbors (k-NN) appliqué à la classification de la qualité des vins blancs. L'objectif est d'apprendre un modèle de prédiction capable de discriminer les vins de bonne qualité des vins de mauvaise qualité en utilisant leurs caractéristiques physico-chimiques. [file:4]
 
-Ce rapport présente une analyse complète du dataset **California
-Housing**, incluant : - Exploration des données\
-- Analyse statistique\
-- Visualisations\
-- Modélisation (Régression Linéaire & Random Forest)\
-- Interprétation des résultats
+## 1. Description du Projet
 
-------------------------------------------------------------------------
+Le travail pratique porte sur la classification binaire des vins blancs selon deux catégories :
+- **Classe 0** : Vins de mauvaise qualité (score de qualité ≤ 5)
+- **Classe 1** : Vins de bonne qualité (score de qualité > 5)
 
-## 2. Chargement et Structure des Données
+Le dataset utilisé provient du Machine Learning Repository de l'UCI et contient 11 caractéristiques physico-chimiques mesurées sur les vins. [file:4]
 
-Le dataset contient les informations suivantes : - Nombre d'observations
-: \~17 000\
-- Nombre de variables : 9\
-- Toutes les variables sont numériques.
+## 2. Préparation des Données
 
-------------------------------------------------------------------------
+### 2.1 Chargement et Exploration
 
-## 3. Analyse Exploratoire
+Le dataset a été téléchargé directement depuis le lien UCI. Les données contiennent :
+- **Variables d'entrée (X)** : 11 caractéristiques physico-chimiques (acidité, alcool, densité, etc.)
+- **Variable de sortie (Y)** : Score de qualité du vin (transformé en problème binaire)
 
-### 3.1 Statistiques Descriptives
+### 2.2 Partitionnement des Données
 
-Les statistiques montrent : - `median_income` varie fortement → variable
-clé. - `total_rooms` et `total_bedrooms` présentent de fortes
-dispersions. - Aucune valeur manquante détectée.
+Les données ont été divisées en trois ensembles :
+- **Ensemble d'apprentissage (Xa, Ya)** : 33.3% des données restantes après première split (environ 33.3% du total)
+- **Ensemble de validation (Xv, Yv)** : 50% des données d'apprentissage
+- **Ensemble de test (Xt, Yt)** : 33.3% des données initiales
 
-### 3.2 Distribution des Variables
+La stratification a été appliquée pour préserver la distribution des classes à chaque étape.
 
-Des histogrammes ont été générés pour chaque variable : - Plusieurs
-distributions asymétriques. - Présence d'outliers dans
-`housing_median_age`, `total_rooms`...
+**Justification** : La stratification garantit que les proportions des classes restent identiques dans chaque ensemble, ce qui évite les biais d'apprentissage dus à un déséquilibre classe. Le brassage aléatoire prévient les biais temporels ou de structuration des données. [file:4]
 
-### 3.3 Corrélation
+## 3. Classification avec k-NN
 
--   La variable la plus corrélée avec `median_house_value` est
-    **median_income**.
--   Les corrélations globales restent modérées.
+### 3.1 Algorithme k-NN
 
-------------------------------------------------------------------------
+L'algorithme k-Nearest Neighbors fonctionne selon le principe suivant :
+- Pour chaque nouveau sample \(x_i\), on identifie ses k voisins les plus proches dans l'ensemble d'apprentissage
+- La distance euclidienne est utilisée : \(\| x_i - x_j \|_2 = \sqrt{(x_i - x_j)^T (x_i - x_j)}\)
+- La classe prédite correspond au label majoritaire parmi ces k voisins
 
-## 4. Visualisations Importantes
+### 3.2 Évaluation de Performance
 
-### 4.1 Pairplot des variables les plus corrélées
+Le taux d'erreur est calculé comme :
+\[
+\text{Erreur} = \frac{1}{N} \sum_{i \in D} \mathbb{1}[y_i \neq \hat{y}_i]
+\]
+où \(N\) est la taille de l'ensemble, \(y_i\) le vrai label et \(\hat{y}_i\) le label prédit. [file:4]
 
-Les variables les plus importantes selon la corrélation : -
-`median_income` - `total_rooms` - `housing_median_age` -
-`median_house_value`
+### 3.3 Expériences
 
-### 4.2 Scatterplots
+L'implémentation teste différentes valeurs de k (de 1 à 40) et évalue les performances sur les ensembles d'apprentissage et de validation.
 
-Tendances observées : - **Hausse linéaire claire** entre `median_income`
-et la valeur des maisons. - Faible relation directe entre `total_rooms`
-et la valeur immobilière.
+**Observations clés** :
+- Les **erreurs d'apprentissage** décroissent généralement avec l'augmentation de k (le modèle s'adapte moins bien)
+- Les **erreurs de validation** montrent un comportement en U, révélant le phénomène de surapprentissage
+- **Surapprentissage** : Pour k très petit (k=1, k=3), l'erreur d'apprentissage est très faible mais l'erreur de validation augmente
 
-### 4.3 Boxplots
+## 4. Analyse de la Surcharge d'Apprentissage
 
-Les boxplots confirment la présence d'importants outliers.
+### 4.1 Identification du Problème
 
-------------------------------------------------------------------------
+Le graphique erreur d'apprentissage vs validation révèle :
+- **Pour k petit** : Écart important entre les deux courbes → le modèle mémorise les données d'apprentissage
+- **Pour k optimal** : Les deux courbes convergent → meilleur équilibre biais-variance
 
-## 5. Modélisation
+### 4.2 Sélection du Paramètre k
 
-### 5.1 Préparation
+Le meilleur \(k^*\) est sélectionné en minimisant l'erreur de validation. Cette approche garantit une bonne performance sur des données non vues pendant l'entraînement. [file:4]
 
--   Standardisation des variables avec `StandardScaler`.
--   Train/test split : 80% / 20%.
+## 5. Normalisation des Données
 
-------------------------------------------------------------------------
+### 5.1 Justification
 
-## 6. Modèle : Régression Linéaire
+La normalisation est cruciale pour k-NN car cet algorithme repose sur les distances entre points. Sans normalisation :
+- Les variables avec des échelles grandes dominent le calcul de distance
+- Les variables avec des petites valeurs sont quasi ignorées
+- Les performances se dégradent
 
-### Résultats :
+### 5.2 Implémentation
 
--   **RMSE ≈ \~69 000**
--   **MAE ≈ \~50 000**
--   **R² ≈ 0.64**
+La normalisation par **standardisation** (z-score) est appliquée :
+\[
+X^{\text{norm}} = \frac{X - \mu}{\sigma}
+\]
+où \(\mu\) est la moyenne et \(\sigma\) l'écart-type de chaque caractéristique.
 
-Interprétation :\
-→ Le modèle explique **64%** de la variance.\
-→ Manque de performance sur un dataset non linéaire.
+**Important** : Le normaliseur est **ajusté uniquement sur Xa** et appliqué identiquement à Xv et Xt pour éviter la fuite d'information. [file:4]
 
-### Coefficients :
+## 6. Résumé des Résultats
 
-Le plus fort impact positif provient de **median_income**.
+| Aspect | Résultat |
+|--------|----------|
+| **Algorithme** | k-Nearest Neighbors |
+| **Nombre de caractéristiques** | 11 |
+| **Nombre de classes** | 2 (binaire) |
+| **Meilleur k*** | Déterminé par minimisation de l'erreur de validation |
+| **Technique d'optimisation** | Recherche en grille sur k∈[1,40] |
+| **Normalisation** | StandardScaler (z-score) |
+| **Bénéfice principal** | Meilleure généralisation | [file:4]
 
-------------------------------------------------------------------------
+## 7. Conclusions
 
-## 7. Modèle : Random Forest Regressor
+1. **Surapprentissage** : Le classifieur k-NN simple tend à surcharger pour k petit
+2. **Sélection robuste de k** : L'utilisation de la validation croisée prévient l'overfitting
+3. **Importance de la normalisation** : La standardisation améliore les performances
+4. **Sensibilité à la split** : La validation croisée k-fold réduit la dépendance aux partitions
 
-### Hyperparamètres utilisés :
+## Recommandations Futures
 
--   300 arbres\
--   max_depth = 12\
--   random_state = 42
-
-### Résultats :
-
--   **RMSE nettement inférieur**\
--   **MAE amélioré**\
--   **R² beaucoup plus élevé**
-
-→ Le modèle capte les non‑linéarités et surpasse largement la régression
-linéaire.
-
-------------------------------------------------------------------------
-
-## 8. Conclusion Générale
-
--   Le dataset présente une forte hétérogénéité.
--   **median_income** est la variable la plus explicative.
--   La **Régression Linéaire** est correcte mais limitée.
--   La **Random Forest** fournit une performance supérieure et s'adapte
-    bien à la complexité des données.
-
-------------------------------------------------------------------------
-
-## 9. Recommandations
-
--   Tester Gradient Boosting / XGBoost.
--   Ajouter des interactions non linéaires.
--   Effectuer une optimisation des hyperparamètres.
--   Nettoyer les outliers extrêmes.
-
-------------------------------------------------------------------------
-
-Rapport généré automatiquement à partir du script fourni.
+- Appliquer la validation croisée k-fold
+- Tester d'autres métriques de distance
+- Comparer avec d'autres classifieurs
+- Analyser les caractéristiques les plus discriminantes [file:4]
