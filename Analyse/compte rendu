@@ -28,7 +28,7 @@ L’objectif de cette analyse est d’explorer le dataset *California Housing* a
 - Relation quasi linéaire entre *median_income* et *median_house_value*.
 
 ### Relations ciblées
-- Relation croissante entre median_income et la valeur des maisons.
+- Relation croissante entre *median_income* et la valeur des maisons.
 
 ## 4. Préparation des données
 - Split train/test : 80% / 20%.
