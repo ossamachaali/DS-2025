@@ -1,1 +1,112 @@
 
+# 📊 Compte Rendu d'Analyse : Modélisation des Prix de l'Immobilier en Californie
+
+## 📝 Introduction
+
+Ce projet consiste en une analyse exploratoire et une modélisation
+prédictive du jeu de données **California Housing**, réalisé dans Google
+Colab.\
+L'objectif principal est d'étudier les caractéristiques des habitations
+afin de prédire la variable cible : **`median_house_value`**.
+
+------------------------------------------------------------------------
+
+# 📥 1. Chargement du Dataset
+
+Le dataset a été chargé via :
+
+``` python
+path = "/content/sample_data/california_housing_train.csv"
+df = pd.read_csv(path)
+```
+
+Plusieurs contrôles préliminaires : - `df.head()` : aperçu\
+- `df.shape` : dimensions\
+- `df.info()` : types\
+- `df.describe()` : statistiques\
+- `df.isnull().sum()` : valeurs manquantes
+
+------------------------------------------------------------------------
+
+# 📊 2. Analyse Exploratoire des Données (EDA)
+
+## 2.1 Distributions
+
+Histogrammes avec KDE pour toutes les variables numériques.
+
+## 2.2 Corrélations
+
+Une heatmap a permis d'identifier les relations linéaires entre
+variables.\
+Variable la plus corrélée au prix : **`median_income`**.
+
+## 2.3 Pairplot
+
+Visualisation des 6 variables les plus corrélées avec la variable cible.
+
+## 2.4 Analyse bivariée
+
+Scatterplots entre : - `median_income` - `total_rooms` -
+`housing_median_age` et **`median_house_value`**.
+
+## 2.5 Boxplots
+
+Détection des valeurs extrêmes.
+
+------------------------------------------------------------------------
+
+# 🛠️ 3. Préparation des Données
+
+## Séparation X / y
+
+``` python
+TARGET = "median_house_value"
+X = df.drop(columns=[TARGET])
+y = df[TARGET]
+```
+
+## Train/Test split
+
+80% entraînement / 20% test.
+
+## Standardisation
+
+Appliquée pour stabiliser les modèles linéaires.
+
+------------------------------------------------------------------------
+
+# 🤖 4. Modélisation
+
+## 4.1 Régression Linéaire
+
+Modèle de base (baseline).
+
+Évaluation : - RMSE\
+- MAE\
+- R²
+
+Extraction des coefficients pour analyse d'importance des variables.
+
+## 4.2 Random Forest Regressor
+
+Modèle avancé : - 300 arbres\
+- profondeur max 12\
+- random_state = 42
+
+Fonction d'évaluation personnalisée.
+
+------------------------------------------------------------------------
+
+# 🧾 5. Conclusions
+
+-   Analyse descriptive complète ✔️\
+-   Visualisations approfondies ✔️\
+-   Sélection des variables importantes ✔️\
+-   Deux modèles testés ✔️\
+-   **Random Forest = meilleure performance**\
+-   Le prix des maisons dépend fortement du revenu médian
+    (`median_income`).
+
+------------------------------------------------------------------------
+
+Document généré automatiquement.
