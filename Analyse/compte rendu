@@ -50,3 +50,4 @@ L'objectif de cette analyse est d'explorer le dataset *California Housing* afin 
 - *median_income* est la variable la plus determinante dans la prediction.
 - Le modele Random Forest propose la meilleure performance.
 
+
