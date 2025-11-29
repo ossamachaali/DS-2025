@@ -1,52 +1,52 @@
-# Compte rendu d’analyse du dataset *California Housing*
+# Compte rendu d'analyse du dataset *California Housing*
 
-## 1. Objectif de l’analyse
-L’objectif de cette analyse est d’explorer le dataset *California Housing* afin de :
-- Comprendre ses caractéristiques.
+## 1. Objectif de l'analyse
+L'objectif de cette analyse est d'explorer le dataset *California Housing* afin de :
+- Comprendre ses caracteristiques.
 - Visualiser la distribution des variables.
-- Étudier les relations entre les features et la variable cible : *median_house_value*.
-- Construire et évaluer des modèles prédictifs.
+- Etudier les relations entre les features et la variable cible : *median_house_value*.
+- Construire et evaluer des modeles predictifs.
 
-## 2. Chargement et Exploration des données
+## 2. Chargement et Exploration des donnees
 
 ### Structure du dataset
 - 20 000 observations.
-- Aucune valeur manquante détectée.
+- Aucune valeur manquante detectee.
 
 ### Statistiques descriptives
-- Les statistiques montrent une forte variabilité entre les régions.
+- Les statistiques montrent une forte variabilite entre les regions.
 
 ## 3. Analyse exploratoire
 
 ### Distribution des variables
-- Histogrammes et boxplots montrent des distributions asymétriques et la présence de valeurs extrêmes.
+- Histogrammes et boxplots montrent des distributions asymetriques et la presence de valeurs extremes.
 
-### Corrélations
-- *median_income* est la variable la plus corrélée avec *median_house_value*.
+### Correlations
+- *median_income* est la variable la plus correlee avec *median_house_value*.
 
 ### Pairplot
-- Relation quasi linéaire entre *median_income* et *median_house_value*.
+- Relation quasi lineaire entre *median_income* et *median_house_value*.
 
-### Relations ciblées
+### Relations ciblees
 - Relation croissante entre *median_income* et la valeur des maisons.
 
-## 4. Préparation des données
+## 4. Preparation des donnees
 - Split train/test : 80% / 20%.
 - Standardisation via StandardScaler.
 
-## 5. Modélisation
+## 5. Modelisation
 
-### Régression Linéaire
-- RMSE ≈ 69 000  
-- MAE ≈ 50 000  
-- R² ≈ 0.63  
+### Regression Lineaire
+- RMSE ~ 69 000
+- MAE ~ 50 000
+- R2 ~ 0.63
 
 ### Random Forest
-- Amélioration notable des performances.
-- R² proche de 0.85–0.90.
+- Amelioration notable des performances.
+- R2 proche de 0.85-0.90.
 
 ## 6. Conclusion
 - Le dataset est propre et exploitable.
-- *median_income* est la variable la plus déterminante dans la prédiction.
-- Le modèle Random Forest propose la meilleure performance.
+- *median_income* est la variable la plus determinante dans la prediction.
+- Le modele Random Forest propose la meilleure performance.
 
