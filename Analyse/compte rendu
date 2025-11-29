@@ -1,1 +1,52 @@
+# Compte rendu d’analyse du dataset *California Housing*
+
+## 1. Objectif de l’analyse
+L’objectif de cette analyse est d’explorer le dataset *California Housing* afin de :
+- Comprendre ses caractéristiques.
+- Visualiser la distribution des variables.
+- Étudier les relations entre les features et la variable cible : *median_house_value*.
+- Construire et évaluer des modèles prédictifs.
+
+## 2. Chargement et Exploration des données
+
+### Structure du dataset
+- 20 000 observations.
+- Aucune valeur manquante détectée.
+
+### Statistiques descriptives
+- Les statistiques montrent une forte variabilité entre les régions.
+
+## 3. Analyse exploratoire
+
+### Distribution des variables
+- Histogrammes et boxplots montrent des distributions asymétriques et la présence de valeurs extrêmes.
+
+### Corrélations
+- *median_income* est la variable la plus corrélée avec *median_house_value*.
+
+### Pairplot
+- Relation quasi linéaire entre *median_income* et *median_house_value*.
+
+### Relations ciblées
+- Relation croissante entre median_income et la valeur des maisons.
+
+## 4. Préparation des données
+- Split train/test : 80% / 20%.
+- Standardisation via StandardScaler.
+
+## 5. Modélisation
+
+### Régression Linéaire
+- RMSE ≈ 69 000  
+- MAE ≈ 50 000  
+- R² ≈ 0.63  
+
+### Random Forest
+- Amélioration notable des performances.
+- R² proche de 0.85–0.90.
+
+## 6. Conclusion
+- Le dataset est propre et exploitable.
+- *median_income* est la variable la plus déterminante dans la prédiction.
+- Le modèle Random Forest propose la meilleure performance.
 
