@@ -1,7 +1,7 @@
 # Compte Rendu Détaillé : Analyse de la Performance des Étudiants
 
 <img src="Chaali Ossama.jpg" style="height:464px;margin-right:432px"/>
-CHAALI OSSAMA
+CHAALI OSSAMA - 24010364
 
 ---
 
