@@ -1,9 +1,9 @@
 # Compte Rendu Détaillé : Analyse de la Performance des Étudiants
 
 <img src="Chaali Ossama.jpg" style="height:464px;margin-right:432px"/>
----
 Chaali Ossama 
 24010364
+---
 ## Introduction
 
 Ce notebook présente une analyse approfondie sur la performance des étudiants à partir d'un dataset Kaggle regroupant 1000 enregistrements avec 8 variables clés : genre, origine ethnique, niveau d'éducation des parents, type de repas, préparation aux tests, et scores aux examens (mathématiques, lecture, écriture). L'objectif est de comprendre les facteurs influençant la performance des étudiants et de modéliser les résultats à l'aide de régressions.
