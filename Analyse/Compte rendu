@@ -1,1 +1,88 @@
+# Compte Rendu Détaillé : Analyse de la Performance des Étudiants
+
+---
+
+## Introduction
+
+Ce notebook présente une analyse approfondie sur la performance des étudiants à partir d'un dataset Kaggle regroupant 1000 enregistrements avec 8 variables clés : genre, origine ethnique, niveau d'éducation des parents, type de repas, préparation aux tests, et scores aux examens (mathématiques, lecture, écriture). L'objectif est de comprendre les facteurs influençant la performance des étudiants et de modéliser les résultats à l'aide de régressions.
+
+---
+
+## Chargement des Données
+
+Les données sont chargées depuis la plateforme Kaggle via différentes méthodes (kagglehub ou URL publique). Le dataset contient 1000 lignes et 8 colonnes principales. Un aperçu montre des caractéristiques variées dans les catégories démographiques et les résultats aux tests.
+
+---
+
+## Exploration Initiale des Données
+
+- Le dataset comprend 5 variables catégorielles et 3 variables numériques (scores).
+- Statistiques descriptives :
+  - Moyenne Score Mathématiques : 66.09 (écart-type 15.16)
+  - Moyenne Score Lecture : 69.17 (écart-type 14.60)
+  - Moyenne Score Écriture : 68.05 (écart-type 15.19)
+- Les colonnes sont listées et leur type vérifié.
+
+---
+
+## Nettoyage des Données
+
+- Vérification et suppression des valeurs manquantes : aucune valeur manquante détectée.
+- Vérification et suppression des doublons : aucun doublon détecté.
+- Standardisation des noms de colonnes pour homogénéité.
+- Création des variables dérivées :
+  - `averagescore` : moyenne des scores en mathématiques, lecture, écriture.
+  - `performancecategory` : classification binaire des performances (Pass si score moyen ≥ 50, Fail sinon).
+- Détection des valeurs aberrantes dans les scores, conservées pour l'analyse.
+
+---
+
+## Visualisations
+
+- Histogrammes des distributions des scores par matière et du score moyen.
+- Visualisation des effets du suivi de préparation aux tests et du type de repas.
+- Visualisation Rgression Linéaire : prédictions vs valeurs réelles, analyse des résidus.
+- Matrice de confusion pour la classification binaire Pass/Fail.
+
+---
+
+## Modèles de Machine Learning
+
+### Régression Linéaire (Prédiction score de mathématiques)
+- Variables indépendantes encodées : genre, ethnie, éducation parentale, type de repas, préparation aux tests.
+- R² Score : 0.1663 (faible mais significatif)
+- RMSE : 14.24
+- Influence des variables mesurée par coefficients :
+  - Type déjeuner standard : coefficient positif marqué (+11.44)
+  - Préparation aux tests : coefficient négatif (-6.31)
+  - Genre (female) : coefficient positif (+4.54)
+
+### Régression Logistique (Prédiction catégorie de performance Pass/Fail)
+- Accuracy globale élevée : 89.50%
+- Très bonne précision pour la classe "Pass" (~90%), mais mauvaise pour "Fail" (0%), ce qui révèle un déséquilibre de classes.
+- Matrice de confusion visualisée.
+
+---
+
+## Résultats et Interprétations
+
+- Le type de repas standard est associé à un meilleur score en mathématiques.
+- La préparation aux tests a un effet négatif surprenant sur le score en mathématiques, ce qui pourrait indiquer des facteurs externes ou erreurs à approfondir.
+- La classification Pass/Fail est majoritairement dominée par des passages (90%), expliquant la faible performance à prédire les échecs.
+- Les modèles présentent une capacité modeste à prédire la réussite, suggérant la nécessité d'autres variables explicatives.
+
+---
+
+## Conclusion
+
+Ce travail fournit une vue d'ensemble robuste sur la performance estudiantine, incluant exploration, nettoyage, visualisation et modélisation. Malgré quelques limites liées à la simplicité des modèles et au déséquilibre des classes, les résultats mettent en lumière des facteurs clés influençant les résultats scolaires. Ce notebook sert de base pour des analyses plus approfondies et amélioration des modèles futurs.
+
+---
+
+*Fin du compte rendu*
+
+---
+
+*Ce fichier est généré automatiquement à partir du notebook `Analyse_de_la_performance_des_etudiants.ipynb` envoyé par l'utilisateur.*
+
 
