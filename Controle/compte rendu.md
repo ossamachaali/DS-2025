@@ -1,5 +1,8 @@
 # Compte-rendu des fichiers 
 
+<img src="Chaali Ossama.jpg" style="height:464px;margin-right:432px"/>
+CHAALI OSSAMA - 24010364
+
 ## Description générale
 Les fichiers contiennent un projet d'analyse et de classification du jeu de données Iris, un classique en machine learning. Le fichier `.py` est un script Python, tandis que le `.ipynb` est un notebook Jupyter interactif exécuté sur Google Colab. Le projet comprend l'exploration des données, diverses visualisations et la mise en œuvre de plusieurs modèles de classification.
 
